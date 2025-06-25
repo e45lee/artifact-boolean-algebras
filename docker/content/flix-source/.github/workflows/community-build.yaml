@@ -1,0 +1,71 @@
+name: Community Build
+
+on: [pull_request, merge_group]
+
+permissions:
+  contents: read
+
+# Cancel previous runs if the PR is updated
+concurrency:
+  cancel-in-progress: true
+  group: community-build-${{ github.ref }}
+
+jobs:
+  # Build the JAR once for all the community builds
+  build-jar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build Flix JAR
+        run: ./gradlew jar
+      - name: Upload Flix JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: flix-jar
+          path: build/libs/flix.jar
+
+  # Spawn a separate job per community build
+  community-build:
+    needs: build-jar
+    strategy:
+      # collect all the failures
+      fail-fast: false
+      # run them one at a time
+      max-parallel: 1
+      matrix:
+        repo:
+          - "JonathanStarup/Flix-ANSI-Terminal"
+          - "flix/museum"
+          - "jaschdoc/flix-parsers"
+          - "mlutze/flix-json"
+          - "mlutze/flixball"
+          - "stephentetley/charset-locale"
+          - "stephentetley/flix-either"
+          - "stephentetley/flix-htmldoc"
+          - "stephentetley/flix-pretty"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Check out project head
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.repo }}
+      - name: Download Flix JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: flix-jar
+      - name: Build community project
+        timeout-minutes: 10
+        run: |
+          # Build the project.
+          java -jar flix.jar build --github-token ${{ github.token }}

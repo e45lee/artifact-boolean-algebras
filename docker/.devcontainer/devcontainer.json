@@ -1,0 +1,11 @@
+{   
+    "image": "flix-submission",
+    
+    "workspaceFolder": "/workspace",
+
+    "customizations": {
+        "vscode": {
+            "extensions": ["/flix.flix-1.40.0.vsix"]
+        }
+    }
+}
