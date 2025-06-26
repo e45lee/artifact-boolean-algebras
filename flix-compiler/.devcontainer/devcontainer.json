@@ -2,10 +2,4 @@
     "image": "qualified-types-with-boolean-algebras",
 
     "workspaceFolder": "/workspace",
-
-    "customizations": {
-        "vscode": {
-            "extensions": ["/flix.flix-1.32.0.vsix"]
-        }
-    }
 }

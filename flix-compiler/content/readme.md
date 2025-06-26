@@ -348,6 +348,7 @@ have the full IDE experience.
 - Search ">Dev Containers: Reopen in Container" and choose that option.
 - If this fails, make sure you have done the Getting Started Guide and has created a container.
 - Now you should see the artifact folder open.
+- Right-click on the .vsix file and select install extension.
 - Create a file "test.flix" and begin typing, you should see the highlighting and error reporting.
 
 
