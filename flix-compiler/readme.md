@@ -289,10 +289,26 @@ moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
 
 # Reusability Guide
-explain which parts of your artifact constitute the core pieces which should be
-evaluated for reusability. Explain how to adapt the artifact to new inputs or
-new use cases. Provide instructions for how to find/generate/read documentation
-about the core artifact. Articulate any limitations to the artifact’s
-reusability.
+The Flix programming language is fully open source and extensively documented. The compiler itself
+is in `flix-source/` folder but supportive material exists externally.
 
-TODO
+The main website is:
+
+    https://flix.dev/
+
+The main GitHub repository contains the source code:
+
+    https://github.com/flix/flix
+
+There is an online playground with extensive examples:
+
+    https://play.flix.dev/
+
+There is extensive online documentation (more than 200 pages):
+
+    https://doc.flix.dev/
+
+A researcher that wants to build on our work can obtain everything they need
+from the GitHub repository. The build instructions are here:
+
+    `flix-source/docs/BUILD.md`
