@@ -5,7 +5,7 @@
 
     "customizations": {
         "vscode": {
-            "extensions": ["/flix.flix-1.40.0.vsix"]
+            "extensions": ["/flix.flix-1.32.0.vsix"]
         }
     }
 }
