@@ -16,8 +16,11 @@ RUN apt-get update &&\
 
 RUN apt-get install curl -y &&\
     apt-get install unzip -y &&\
-    apt-get install zip -y &&\
-    apt-get install curl source
+    apt-get install zip -y
+
+RUN curl -s "https://get.sdkman.io" | bash
+
+RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install java 21.0.2-open && cd flix-source && ./gradlew build"
 
 # Add flix as an alias for easily calling the compiler.
 RUN echo "alias flix='java -jar /workspace/flix.jar'" >> /root/.bashrc
