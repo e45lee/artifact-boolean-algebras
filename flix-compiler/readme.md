@@ -14,21 +14,23 @@ all except the first can be replicated as described below. The first table is a
 snapshot in time of online data and cannot as such be replicated meaningfully.
 
 This artifact contains:
-- library../
-  - These folders are used for Table 3 and is explained in Step by Step
-    Instructions.
+- .devcontainer/..
+  - This folder has a configuration for opening the container in VSCode.
 - flix-source/
   - This folder contains the source code of the modified Flix compiler,
     described and used in the paper. The compiler is not documented specifically
     in this artifact but has its existing documentation.
-- readme.md
-  - This file.
-- flix.jar
-  - This is the built jar of flix-source. The `flix ..` command is just
-    shorthand for `java -jar flix.jar`.
+- library../
+  - These folders are used for Table 3 and is explained in Step by Step
+    Instructions.
 - flix.flix-1.40.0.vsix
   - This is the VSCode extension for Flix, used if opening the container in
     VSCode.
+- flix.jar
+  - This is the built jar of flix-source. The `flix ..` command is just
+    shorthand for `java -jar flix.jar`.
+- readme.md
+  - This file.
 
 # Hardware Dependencies
 Since the artifact is contained in a docker file, the only hardware requirements
@@ -44,7 +46,7 @@ and then use
 ```
 docker run -it qualified-types-with-boolean-algebras
 ```
-to enter the container. It holds a copy of this file for convenience.
+to enter the container terminal. It holds a copy of this file for convenience.
 
 To see that the proof is correct ... TODO
 
@@ -287,6 +289,75 @@ to the paper. (~1.05x for se-def, ~1.01x for se-ins, and ~1.18x for se-lam).
 The claim of the paper is that the slowdown of the subeffecting options are
 moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
+
+## Using Flix and VSCode
+You can play around with Flix and the subeffecting via the command line or
+VSCode via the docker container extension.
+
+### Command line
+There are several ways to use the compiler.
+
+#### REPL
+To use the Flix repl, simply call `flix` with the subeffecting options of
+interest. The following shows an example.
+
+```
+$ flix --Xsubeffecting se-def
+No `flix.toml`. Will load source files from `*.flix`, `src/**`, and `test/**`.
+     __   _   _
+    / _| | | (_)            Welcome to Flix 0.52.0
+   | |_  | |  _  __  __
+   |  _| | | | | \ \/ /     Enter an expression to have it evaluated.
+   | |   | | | |  >  <      Type ':help' for more information.
+   |_|   |_| |_| /_/\_\     Type ':quit' or press 'ctrl + d' to exit.
+flix> def inc(x: Int32): Int32 \ IO = x
+Ok.
+flix> def inc2(): Int32 -> Int32 \ IO = x -> x + 1
+-- Type Error -------------------------------------------------- $2
+
+>> Mismatched Pure and Effectful Functions.
+
+1 | def inc2(): Int32 -> Int32 \ IO = x -> x + 1
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    mismatched pure and effectful functions.
+
+Type One: Int32 -> Int32 \ IO
+Type Two: Int32 -> Int32
+
+Error: Declaration ignored due to previous error(s).
+flix> :q
+```
+
+Here you can see that `se-def` allows subeffecting on the def but not on the
+lambda.
+
+#### Run a file
+```
+echo "def main(): Int32 \ IO = 32" > test.flix
+flix test.flix --Xsubeffecting se-def
+```
+This should print 32, and you can edit the `test.flix` file as you please.
+
+#### VSCode
+You can use VSCode on your own computer to hook into the docker container and
+have the full IDE experience.
+
+- Download VSCode https://code.visualstudio.com/download
+- Open a new window.
+- Open extensions.
+- Install "Dev Containers" by Microsoft.
+- Open up the VSCode search (at the top of the window).
+- search ">View: Show Remote Explorer" and pick that option.
+- Make sure that the top dropdown has selected "Dev Containers" and not "WSL
+  Targets" fx.
+- Now you should see the running docker image of this artifact. Otherwise check
+  the steps in Getting Started Guide.
+- Click on the arrow of the container "Connect in Current Window".
+- It might warn you about running arbitrary code, click accept.
+- If the container, is not running, press "Start Container" on the popup window.
+
+
+
 
 # Reusability Guide
 The Flix programming language is fully open source and extensively documented.
