@@ -4,16 +4,19 @@
 
 # Introduction
 
-This artifact contains both the formalized proof of F<:B and F<:BE as discussed
-in the paper and the modified Flix compiler used in the evaluation.
+This artifact contains both the formalized proof of F<:B and F<:BE as discussed in the paper and the modified Flix compiler used in the evaluation.
 
-The proof ... TODO
+The proof consits of two calculi:
+- F<:B, formalized in ([proofs/Base](Base)), consisting of an qualifier calculus based on an arbritary boolean algebra with uninterpreted qualifiers.
+- F<:BE, formalized in ([proofs/EffectExclusion](EffectExclusion)), consisting of a calculus where the qualifiers denote potential effects functions may perform.
+
+These proofs are based on the [POPLMark 08 tutorial](https://github.com/plclub/metalib) by Aydemir et. al. and the proof of [Qualifying System F<:](https://github.com/e45lee/qualifying-fsub-proofs) by Lee et. al.
 
 The claims of the evaluation section is all expressed in the tables (1-4) and
 all except the first can be replicated as described below. The first table is a
 snapshot in time of online data and cannot as such be replicated meaningfully.
 
-This artifact contains:
+This Flix portion of  this artifact consists of (under ([flix-compiler/](flix-compiler/))):
 - .devcontainer/..
   - This folder has a configuration for opening the container in VSCode.
 - flix-source/
@@ -29,8 +32,6 @@ This artifact contains:
 - flix.jar
   - This is the built jar of flix-source. The `flix ..` command is just
     shorthand for `java -jar flix.jar`.
-- readme.md
-  - This file.
 
 # Hardware Dependencies
 Since the artifact is contained in a docker file, the only hardware requirements
@@ -48,7 +49,12 @@ docker run -it qualified-types-with-boolean-algebras
 ```
 to enter the container terminal. It holds a copy of this file for convenience.
 
-To see that the proof is correct ... TODO
+To see that the proofs are correct, you can rebuild the proofs by:
+```
+cd proofs
+make clean
+make
+```
 
 Flix is invoked via the `flix ..` command. If you just want to see it run, use
 `flix check --Xsummary --Xsubeffecting se-def,se-ins,se-lam` which will type
@@ -57,11 +63,37 @@ summary table of the paper.
 
 # Step by Step Instructions
 
+## Replication -- Proofs
 
-## Proof stuff TODO
+### Definitions
+Definitions for each calculus can be found in `Fsub_LetSum_Definitions.v` in each respective folder.
+
+### Soundness Theorems / Proofs
+Soundness (progress and preservation proofs) for each calculus can be found in `Fsub_LetSum_Soundness.v` in each respective folder.
+
+## Pre-built proofs and documentation
+While the repository contains the sources of the Coq files and the documentation
+associated with the Coq proofs as well, a pre-built archive of the compiled Coq proof
+can be downloaded and inspected by pulling the following automatically generated Docker image.
+
+```
+    docker pull ghcr.io/e45lee/artifact-boolean-algebra:main
+```
+
+The Coq proofs and generated documentation can be found under `/proofs` in the generated Docker image.
+To extract the pre-built proofs and documentation (into a folder called `proofs`), run:
+
+```
+    docker run -w / ghcr.io/e45lee/artifact-boolean-algebra:main tar c proofs | tar x
+```
+
+In addition, the Coq documentation can be found online at (hopefully soon!):
+
+<https://e45lee.github.io/artifact-boolean-algebra/toc.html>
 
 
-## Replicating the Tables of the Paper
+
+## Replication -- Flix
 We will use `flix ..` commands to replicate the tables of the paper.
 
 Running `flix ..` will always say
@@ -351,8 +383,17 @@ have the full IDE experience.
 - Right-click on the .vsix file and select install extension.
 - Create a file "test.flix" and begin typing, you should see the highlighting and error reporting.
 
+## Reusability Guide (Proofs)
 
-# Reusability Guide
+In general, the base calculi (stored in [proofs/Base](Base)) and  can be reused to serve as the basis of a soundness proof
+for a specific instantiation of a qualifier calculus to concrete qualifiers
+and interpretations.  In particular, to construct our proofs of soundness
+for our effect-exclusion dervied calculs we started from our base calculus proof and
+extended it with the new terms and reduction rules -- features -- present
+in each extension, taking care to assign meaningful and reasonable
+interpretations of qualifiers as well, as one would do on paper as well.
+
+# Reusability Guide (Flix)
 The Flix programming language is fully open source and extensively documented.
 The compiler itself is in `flix-source/` folder but supportive material exists
 externally.
