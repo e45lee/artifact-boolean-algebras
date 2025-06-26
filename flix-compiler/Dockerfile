@@ -17,8 +17,7 @@ RUN apt-get update &&\
 RUN apt-get install curl -y &&\
     apt-get install unzip -y &&\
     apt-get install zip -y &&\
-    apt-get install curl source &&\
-
+    apt-get install curl source
 
 # Add flix as an alias for easily calling the compiler.
 RUN echo "alias flix='java -jar /workspace/flix.jar'" >> /root/.bashrc
