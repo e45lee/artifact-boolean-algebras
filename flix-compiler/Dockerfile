@@ -12,8 +12,19 @@ COPY content/ $WORKSPACE/
 
 # Populate repository and install java 21 runtime.
 RUN apt-get update &&\
-    apt-get upgrade -y &&\
-    apt-get install -y openjdk-21-jre-headless
+    apt-get upgrade -y
+
+RUN apt-get install curl -y &&\
+    apt-get install unzip -y &&\
+    apt-get install zip -y &&\
+    curl -s "https://get.sdkman.io" | bash &&\
+    source "/root/.sdkman/bin/sdkman-init.sh"
+
+RUN sdk install java 21.0.2-open
+
+RUN cd flix-source
+RUN gradle build
+RUN cd ..
 
 # Add flix as an alias for easily calling the compiler.
 RUN echo "alias flix='java -jar /workspace/flix.jar'" >> /root/.bashrc
