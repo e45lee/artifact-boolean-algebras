@@ -1,4 +1,4 @@
-FROM rpcq/rocq-prover:9.0-native
+FROM rocq/rocq-prover:9.0-native
 
 # Change the name of the workspace here.
 ENV WORKSPACE=/workspace
