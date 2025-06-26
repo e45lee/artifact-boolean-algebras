@@ -294,10 +294,7 @@ listed, the claim remains valid.
 You can play around with Flix and the subeffecting via the command line or
 VSCode via the docker container extension.
 
-### Command line
-There are several ways to use the compiler.
-
-#### REPL
+### REPL
 To use the Flix repl, simply call `flix` with the subeffecting options of
 interest. The following shows an example.
 
@@ -331,14 +328,14 @@ flix> :q
 Here you can see that `se-def` allows subeffecting on the def but not on the
 lambda.
 
-#### Run a file
+### Run a file
 ```
 echo "def main(): Int32 \ IO = 32" > test.flix
 flix test.flix --Xsubeffecting se-def
 ```
 This should print 32, and you can edit the `test.flix` file as you please.
 
-#### VSCode
+### VSCode
 You can use VSCode on your own computer to hook into the docker container and
 have the full IDE experience.
 
@@ -346,17 +343,12 @@ have the full IDE experience.
 - Open a new window.
 - Open extensions.
 - Install "Dev Containers" by Microsoft.
+- Open the artifact folder in VSCode, the one that contains .devcontainer/
 - Open up the VSCode search (at the top of the window).
-- search ">View: Show Remote Explorer" and pick that option.
-- Make sure that the top dropdown has selected "Dev Containers" and not "WSL
-  Targets" fx.
-- Now you should see the running docker image of this artifact. Otherwise check
-  the steps in Getting Started Guide.
-- Click on the arrow of the container "Connect in Current Window".
-- It might warn you about running arbitrary code, click accept.
-- If the container, is not running, press "Start Container" on the popup window.
-
-
+- Search ">Dev Containers: Reopen in Container" and choose that option.
+- If this fails, make sure you have done the Getting Started Guide and has created a container.
+- Now you should see the artifact folder open.
+- Create a file "test.flix" and begin typing, you should see the highlighting and error reporting.
 
 
 # Reusability Guide
