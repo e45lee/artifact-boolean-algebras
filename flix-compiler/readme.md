@@ -289,14 +289,15 @@ moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
 
 # Reusability Guide
-The Flix programming language is fully open source and extensively documented. The compiler itself
-is in `flix-source/` folder but supportive material exists externally.
+The Flix programming language is fully open source and extensively documented.
+The compiler itself is in `flix-source/` folder but supportive material exists
+externally.
 
 The main website is:
 
     https://flix.dev/
 
-The main GitHub repository contains the source code:
+The main GitHub repository contains the source code (similar to `flix-source/`):
 
     https://github.com/flix/flix
 
