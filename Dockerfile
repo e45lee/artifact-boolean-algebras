@@ -14,6 +14,7 @@ ADD --chown=1000:1000 proofs/ $WORKSPACE/proofs/
 # Populate repository and install java 21 runtime.
 RUN sudo apt-get update &&\
     sudo apt-get upgrade -y &&\
+    sudo apt-get install wget lsb-release -y &&\
     wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb &&\
     sudo dpkg -i packages-microsoft-prod.deb &&\
     sudo apt-get update &&\
