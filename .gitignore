@@ -1,3 +1,4 @@
+out/
 *.v.d
 .coqdeps.d
 *.vo*
@@ -12,3 +13,5 @@ coqsplit*
 *_sol.v
 .lia.cache
 Metalib/html/
+artifact-boolean-algebras-amd64.tar
+artifact-boolean-algebras-arm64.tar
