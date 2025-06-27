@@ -2,13 +2,13 @@ FROM rocq/rocq-prover:9.0-native
 
 # Change the name of the workspace here
 ENV WORKSPACE=/workspace
-ENV FLIX_JAR=$WORKSPACE/flix-compiler/flix.jar
+ENV FLIX_JAR=$WORKSPACE/evaluation/flix.jar
 
 # Set work directory to /workspace
 WORKDIR $WORKSPACE
 
 # Copy the container content
-ADD --chown=1000:1000 flix-compiler/content/ $WORKSPACE/flix-compiler/
+ADD --chown=1000:1000 evaluation/ $WORKSPACE/evaluation/
 ADD --chown=1000:1000 proofs/ $WORKSPACE/proofs/
 
 # Install required software
@@ -26,7 +26,7 @@ RUN sudo curl -s "https://get.sdkman.io" | bash
 # These have to be sequenced for 'source' and 'JAVA_PATH' to persist
 RUN source /home/rocq/.sdkman/bin/sdkman-init.sh &&\
     sdk install java 21.0.2-open &&\
-    cd flix-compiler/flix-source &&\
+    cd evaluation/flix-compiler-source &&\
     ./gradlew build
 
 # Build the proofs
