@@ -1,7 +1,3 @@
-TODO
-- proofs: tons of warnings when I run make
-- make seems to take a very long time (so long I stopped waiting). how long is normal?
-
 # Introduction
 This artifact contains both the formalized proof of F<:B and F<:BE as discussed
 in the paper and the modified Flix compiler used in the evaluation.
@@ -305,8 +301,8 @@ flix Xperf --frontend --par --n 250 --Xsubeffecting se-def &&
 flix Xperf --frontend --par --n 250 --Xsubeffecting se-ins &&
 flix Xperf --frontend --par --n 250 --Xsubeffecting se-lam
 ```
-Each `Xperf` command will report progress on each run `Run x/250` and then at the
-end it will output something like
+Each `Xperf` command will report progress on each run `Run x/250` and then at
+the end it will output something like
 ```
 ~~~~ Flix Compiler Performance ~~~~
 
@@ -448,7 +444,7 @@ Run one of these commands based on your system
 docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
 docker build . --platform linux/arm64 -t qualified-types-with-boolean-algebras
 ```
-The build command takes about 15 minutes.
+The build command takes about 15 minutes and uses the internet.
 
 ## Creaking the Docker Image Files
 Run the following commands to get an amd64 and arm64 image.
