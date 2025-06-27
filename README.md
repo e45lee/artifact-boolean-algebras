@@ -330,7 +330,7 @@ listed, the claim remains valid.
 
 ### Rebuilding the Artifact
 While not necessary to check the proofs nor to run Flix, the Docker images for this artifact can be rebuilt by running the 
-`./rebuild-artifact` script located at the root of the artifact.
+`./rebuild-artifact` script located at the root of the artifact from outside Docker.
 
 ## Using Flix and VSCode
 You can play around with Flix and the subeffecting via the command line or
