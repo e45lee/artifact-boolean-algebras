@@ -394,7 +394,7 @@ have the full IDE experience.
   and error reporting.
 
 The subeffecting settings can be changed in the extension settings under
-"additional flix compiler arguments" and using `--Xsubeffectin se-lam` fx.
+"additional flix compiler arguments" and using `--Xsubeffecting se-lam` fx.
 
 ## Reusability Guide (Proofs)
 
