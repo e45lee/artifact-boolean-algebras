@@ -16,6 +16,8 @@ ADD --chown=1000:1000 README.md $WORKSPACE/README.md
 RUN sudo apt-get update
 RUN sudo apt-get upgrade -y
 RUN sudo apt-get install wget lsb-release -y
+RUN sudo apt install nano -y
+RUN sudo apt install vim -y
 RUN sudo apt-get install curl -y
 RUN sudo apt-get install unzip -y
 RUN sudo apt-get install zip -y

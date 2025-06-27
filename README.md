@@ -51,6 +51,8 @@ docker run -it qualified-types-with-boolean-algebras
 ```
 to enter the container terminal. It holds a copy of this file for convenience.
 
+If you want to read or edit files, both nano and vim is installed.
+
 To see that the proofs are correct, you can rebuild the proofs by:
 ```
 cd proofs
