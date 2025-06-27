@@ -1,3 +1,13 @@
+Run one of these commands based on your system
+```
+docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
+docker build . --platform linux/arm64 -t qualified-types-with-boolean-algebras
+```
+
+
+
+# Stock build instructions
+
 ## Getting started
 - Have docker installed and running.
   - Easiest method is to install [Docker Desktop](https://docs.docker.com/desktop/).
@@ -8,15 +18,15 @@ To build the docker image, run the following command in the folder with the Dock
 ```bash
 $ docker build . -t qualified-types-with-boolean-algebras
 ```
-This will build the image for your current architecture and tag it as `flix-submission`.
-If you want to build it for a different architecture,
-use the `--platform` option:
+This will build the image for your current architecture and tag it as
+`qualified-types-with-boolean-algebras`. If you want to build it for a different
+architecture, use the `--platform` option:
 ```bash
 $ docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
 ```
 For our purposes the relevent values for `--platform` are:
 - `linux/amd64`, meaning the container is a linux distribution (we use ubuntu) for x86\_64.
-- `linx/arm64`, meaning the container is a linux distribution for aarch64.
+- `linux/arm64`, meaning the container is a linux distribution for aarch64.
 
 #### Save image
 To save an image to a file, use the following command:
