@@ -3,11 +3,11 @@ This artifact contains both the formalized proof of F<:B and F<:BE as discussed
 in the paper and the modified Flix compiler used in the evaluation.
 
 The proof consists of two calculi:
-- F<:B, formalized in ([proofs/Base](proofs/Base)), consisting of an qualifier calculus
-  based on an arbritary boolean algebra with uninterpreted qualifiers.
-- F<:BE, formalized in ([proofs/EffectExclusion](proofs/EffectExclusion)), consisting
-  of a calculus where the qualifiers denote potential effects functions may
-  perform.
+- F<:B, formalized in ([proofs/Base](proofs/Base)), consisting of an qualifier
+  calculus based on an arbritary boolean algebra with uninterpreted qualifiers.
+- F<:BE, formalized in ([proofs/EffectExclusion](proofs/EffectExclusion)),
+  consisting of a calculus where the qualifiers denote potential effects
+  functions may perform.
 
 These proofs are based on the [POPLMark 08
 tutorial](https://github.com/plclub/metalib) by Aydemir et. al. and the proof of
@@ -36,18 +36,22 @@ This evaluation portion of this artifact consists of:
     shorthand for `java -jar flix.jar`.
 
 # Hardware Dependencies
-Since the artifact is contained within a Docker image, the only hardware requirements is a computer running on either AMD64 or on an modern 64-bit ARM implementation.
+Since the artifact is contained within a Docker image, the only hardware
+requirements is a computer running on either AMD64 or on an modern 64-bit ARM
+implementation.
 
 # Getting Started Guide
-The Docker image containing both the Flix installation and the precompiled proofs can be found within the artifact, 
-and can be loaded by running the appropriate command for your architecture:
+The Docker image containing both the Flix installation and the precompiled
+proofs can be found within the artifact, and can be loaded by running the
+appropriate command for your architecture:
 ```
 docker load --input artifact-boolean-algebras-x86.tar # amd64
 
 docker load --input artifact-boolean-algebras-arm64.tar # arm64
 ```
 
-Alternatively, one can download the Docker image directly from GitHub directly by running:
+Alternatively, one can download the Docker image directly from GitHub directly
+by running:
 ```
 docker pull ghcr.io/e45lee/artifact-boolean-algebras
 docker image tag ghcr.io/e45lee/artifact-boolean-algebras artifact-boolean-algebras
@@ -63,7 +67,8 @@ If you want to read or edit files, both nano and vim are installed.
 # Step by Step Instructions
 
 ## Replication -- Proofs
-To see that the proofs are correct, you can rebuild the proofs from within the Docker image by running:
+To see that the proofs are correct, you can rebuild the proofs from within the
+Docker image by running:
 ```
 cd proofs
 make clean
@@ -72,16 +77,19 @@ make
 
 ### Definitions
 Definitions for each calculus can be found in `Fsub_LetSum_Definitions.v` in
-each respective folder.  The proofs are presented in a locally nameless style, following the POPLMark 08 tutorial.
+each respective folder.  The proofs are presented in a locally nameless style,
+following the POPLMark 08 tutorial.
 
 ### Soundness Theorems / Proofs
 Soundness (progress and preservation proofs) for each calculus can be found in
-`Fsub_LetSum_Soundness.v` in each respective folder.
-These theorems are found under `Lemma progress` and `Lemma preservation` respectively.
+`Fsub_LetSum_Soundness.v` in each respective folder. These theorems are found
+under `Lemma progress` and `Lemma preservation` respectively.
 
 ### Extracting the pre-built proofs and proof documentation
 While the artifact contains the sources of the Rocq files and the documentation
-associated with the Rocq proofs as well, the Docker image contains a pre-built copy of both the Rocq proofs and documentation under `/workspace/proofs` and `/workspace/proofs/html` respectively.
+associated with the Rocq proofs as well, the Docker image contains a pre-built
+copy of both the Rocq proofs and documentation under `/workspace/proofs` and
+`/workspace/proofs/html` respectively.
 
 To extract the pre-built proofs and documentation (into
 a folder called `proofs`), run:
@@ -326,9 +334,10 @@ moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
 
 ## Replication -- Rebuilding the Artifact
-While not necessary to check the proofs nor to run Flix, the Docker images for this artifact can be rebuilt by running the 
-`./rebuild-artifact` script located at the root of the artifact from outside Docker.  Docker BuildX will need to be installed
-to do so.
+While not necessary to check the proofs nor to run Flix, the Docker images for
+this artifact can be rebuilt by running the `./rebuild-artifact` script located
+at the root of the artifact from outside Docker. Docker BuildX will need to be
+installed to do so.
 
 ## Using Flix and VSCode
 You can play around with Flix and the subeffecting via the command line or
@@ -399,14 +408,14 @@ The subeffecting settings can be changed in the extension settings under
 # Reusability Guide
 
 ## Proofs
-In general, the base calculi (stored in [proofs/Base](proofs/Base)) and can be reused
-to serve as the basis of a soundness proof for a specific instantiation of a
-qualifier calculus to concrete qualifiers and interpretations. In particular,
-to construct our proofs of soundness for our effect-exclusion derived calculus
-we started from our base calculus proof and extended it with the new terms and
-reduction rules -- features -- present in each extension, taking care to assign
-meaningful and reasonable interpretations of qualifiers as well, as one would do
-on paper as well.
+In general, the base calculi (stored in [proofs/Base](proofs/Base)) and can be
+reused to serve as the basis of a soundness proof for a specific instantiation
+of a qualifier calculus to concrete qualifiers and interpretations. In
+particular, to construct our proofs of soundness for our effect-exclusion
+derived calculus we started from our base calculus proof and extended it with
+the new terms and reduction rules -- features -- present in each extension,
+taking care to assign meaningful and reasonable interpretations of qualifiers as
+well, as one would do on paper as well.
 
 ## Compiler
 The Flix programming language is fully open source and extensively documented.
