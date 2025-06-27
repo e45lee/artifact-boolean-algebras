@@ -21,5 +21,5 @@ if [ -d ".git" ]; then
    --add-file artifact-boolean-algebras-amd64.tar --add-file artifact-boolean-algebras-arm64.tar
 else
   echo "No git repository detected, creating zip without git history"
-  zip -r out/artifact-boolean-algebras.zip . -x "*.git*" -x "out/*" -x "*.tar"
+  zip -r out/artifact-boolean-algebras.zip . -x "*.git*" -x "out/*"
 fi
