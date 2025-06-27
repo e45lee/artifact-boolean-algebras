@@ -1,0 +1,23 @@
+name: Build and Upload Artifact
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build Artifact
+      run: ./rebuild-artifact
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: artifact-boolean-algebras # optional, default is artifact
+        path: out/artifact-boolean-algebras.zip
