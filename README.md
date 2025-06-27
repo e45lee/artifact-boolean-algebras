@@ -23,7 +23,7 @@ This Flix portion of  this artifact consists of (under
 ([flix-compiler/](flix-compiler/))):
 - .devcontainer/..
   - This folder has a configuration for opening the container in VSCode.
-- flix-source/
+- flix-compiler-source/
   - This folder contains the source code of the modified Flix compiler,
     described and used in the paper. The compiler is not documented specifically
     in this artifact but has its existing documentation.
@@ -34,7 +34,7 @@ This Flix portion of  this artifact consists of (under
   - This is the VSCode extension for Flix, used if opening the container in
     VSCode.
 - flix.jar
-  - This is the built jar of flix-source. The `flix ..` command is just
+  - This is the built jar of flix-compiler-source. The `flix ..` command is just
     shorthand for `java -jar flix.jar`.
 
 # Hardware Dependencies
@@ -84,7 +84,7 @@ proof can be downloaded and inspected by pulling the following automatically
 generated Docker image.
 
 ```
-    docker pull ghcr.io/e45lee/artifact-boolean-algebra:main
+docker pull ghcr.io/e45lee/artifact-boolean-algebra:main
 ```
 
 The Coq proofs and generated documentation can be found under `/proofs` in the
@@ -92,7 +92,7 @@ generated Docker image. To extract the pre-built proofs and documentation (into
 a folder called `proofs`), run:
 
 ```
-    docker run -w / ghcr.io/e45lee/artifact-boolean-algebra:main tar c proofs | tar x
+docker run -w / ghcr.io/e45lee/artifact-boolean-algebra:main tar c proofs | tar x
 ```
 
 In addition, the Coq documentation can be found online at (hopefully soon!):
@@ -406,14 +406,15 @@ on paper as well.
 
 # Reusability Guide (Flix)
 The Flix programming language is fully open source and extensively documented.
-The compiler itself is in `flix-source/` folder but supportive material exists
-externally.
+The compiler itself is in `flix-compiler-source/` folder but supportive material
+exists externally.
 
 The main website is:
 
     https://flix.dev/
 
-The main GitHub repository contains the source code (similar to `flix-source/`):
+The main GitHub repository contains the source code (similar to
+`flix-compiler-source/`):
 
     https://github.com/flix/flix
 
