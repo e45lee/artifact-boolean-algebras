@@ -407,7 +407,8 @@ on paper as well.
 # Reusability Guide (Flix)
 The Flix programming language is fully open source and extensively documented.
 The compiler itself is in `flix-compiler-source/` folder but supportive material
-exists externally.
+exists externally. You can modify the compiler in anyway you want and build it
+with `./gradlew build` in the `flix-compiler-source/` folder.
 
 The main website is:
 
@@ -429,4 +430,4 @@ There is extensive online documentation (more than 200 pages):
 A researcher that wants to build on our work can obtain everything they need
 from the GitHub repository. The build instructions are here:
 
-    `flix-source/docs/BUILD.md`
+    `flix-compiler-source/docs/BUILD.md`
