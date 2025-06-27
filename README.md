@@ -3,9 +3,9 @@ This artifact contains both the formalized proof of F<:B and F<:BE as discussed
 in the paper and the modified Flix compiler used in the evaluation.
 
 The proof consists of two calculi:
-- F<:B, formalized in ([proofs/Base](Base)), consisting of an qualifier calculus
+- F<:B, formalized in ([proofs/Base](proofs/Base)), consisting of an qualifier calculus
   based on an arbritary boolean algebra with uninterpreted qualifiers.
-- F<:BE, formalized in ([proofs/EffectExclusion](EffectExclusion)), consisting
+- F<:BE, formalized in ([proofs/EffectExclusion](proofs/EffectExclusion)), consisting
   of a calculus where the qualifiers denote potential effects functions may
   perform.
 
@@ -36,20 +36,28 @@ This evaluation portion of this artifact consists of:
     shorthand for `java -jar flix.jar`.
 
 # Hardware Dependencies
-Since the artifact is contained in a docker file, the only hardware requirements
-is a computer using either amd64/x86_64 or arm64/aarch64.
+Since the artifact is contained within a Docker image, the only hardware requirements is a computer running on either AMD64 or on an modern 64-bit ARM implementation.
 
 # Getting Started Guide
-Load the docker image with the appropriate command to your architecture
+The Docker image containing both the Flix installation and the precompiled proofs can be found within the artifact, 
+and can be loaded by running the appropriate command for your architecture:
 ```
-docker load --input qualified-types-with-boolean-algebras-image-amd64.tar
-docker load --input qualified-types-with-boolean-algebras-image-arm64.tar
+docker load --input artifact-boolean-algebras-x86.tar # amd64
+
+docker load --input artifact-boolean-algebras-arm64.tar # arm64
 ```
-and then use
+
+Alternatively, one can download the Docker image directly from GitHub directly by running:
 ```
-docker run -it qualified-types-with-boolean-algebras
+docker pull ghcr.io/e45lee/artifact-boolean-algebras
+docker image tag ghcr.io/e45lee/artifact-boolean-algebras artifact-boolean-algebras
 ```
-to enter the container terminal. It holds a copy of this file for convenience.
+
+Once the image has been loaded or downloaded, one can run the image by running:
+```
+docker run -it artifact-boolean-algebras
+```
+to enter the container terminal. It holds a copy of this README.md for convenience.
 
 To see that the proofs are correct, you can rebuild the proofs by:
 ```
@@ -74,33 +82,26 @@ The meaning of the subeffecting options are explained in the paper
 
 ### Definitions
 Definitions for each calculus can be found in `Fsub_LetSum_Definitions.v` in
-each respective folder.
+each respective folder.  The proofs are presented in a locally nameless style, following the POPLMark 08 tutorial.
 
 ### Soundness Theorems / Proofs
 Soundness (progress and preservation proofs) for each calculus can be found in
 `Fsub_LetSum_Soundness.v` in each respective folder.
+These theorems are found under `Lemma progress` and `Lemma preservation` respectively.
 
-## Pre-built proofs and documentation
-While the repository contains the sources of the Coq files and the documentation
-associated with the Coq proofs as well, a pre-built archive of the compiled Coq
-proof can be downloaded and inspected by pulling the following automatically
-generated Docker image.
+### Extracting the pre-built proofs and proof documentation
+While the artifact contains the sources of the Rocq files and the documentation
+associated with the Coq proofs as well, the Docker image contains a pre-built copy of both the Rocq proofs and documentation under `/workspace/proofs`.
 
-```
-docker pull ghcr.io/e45lee/artifact-boolean-algebra:main
-```
 
-The Coq proofs and generated documentation can be found under `/proofs` in the
-generated Docker image. To extract the pre-built proofs and documentation (into
+To extract the pre-built proofs and documentation (into
 a folder called `proofs`), run:
-
 ```
-docker run -w / ghcr.io/e45lee/artifact-boolean-algebra:main tar c proofs | tar x
+docker run artifact-boolean-algebras tar c proofs | tar x
 ```
 
 In addition, the Coq documentation can be found online at (hopefully soon!):
-
-<https://e45lee.github.io/artifact-boolean-algebra/toc.html>
+<https://e45lee.github.io/artifact-boolean-algebras/toc.html>
 
 ## Replication -- Flix
 We will use `flix` commands to replicate the tables of the paper.
@@ -327,6 +328,10 @@ The claim of the paper is that the slowdown of the subeffecting options are
 moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
 
+### Rebuilding the Artifact
+While not necessary to check the proofs nor to run Flix, the Docker images for this artifact can be rebuilt by running the 
+`./rebuild-artifact` script located at the root of the artifact.
+
 ## Using Flix and VSCode
 You can play around with Flix and the subeffecting via the command line or
 VSCode via the docker container extension.
@@ -396,7 +401,7 @@ The subeffecting settings can be changed in the extension settings under
 # Reusability Guide
 
 ## Proofs
-In general, the base calculi (stored in [proofs/Base](Base)) and can be reused
+In general, the base calculi (stored in [proofs/Base](proofs/Base)) and can be reused
 to serve as the basis of a soundness proof for a specific instantiation of a
 qualifier calculus to concrete qualifiers and interpretations. In particular,
 to construct our proofs of soundness for our effect-exclusion derived calculus
@@ -433,26 +438,3 @@ A researcher that wants to build on our work can obtain everything they need
 from the GitHub repository. The build instructions are here:
 
     `flix-compiler-source/docs/BUILD.md`
-
-# Building the Docker Image Yourself
-You do not need to build the docker images, you can just use the included ones.
-But if you want to, these sections explain how to build the image.
-
-## Building the Docker Image
-Run one of these commands based on your system
-```
-docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
-docker build . --platform linux/arm64 -t qualified-types-with-boolean-algebras
-```
-The build command takes about 15 minutes and uses the internet.
-
-## Creaking the Docker Image Files
-Run the following commands to get an amd64 and arm64 image.
-```
-docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
-docker image save -o "qualified-types-with-boolean-algebras-amd64.tar" qualified-types-with-boolean-algebras
-docker build . --platform linux/arm64 -t qualified-types-with-boolean-algebras
-docker image save -o "qualified-types-with-boolean-algebras-arm64.tar" qualified-types-with-boolean-algebras
-```
-Note that the second build commands overrides the first, so do not rearrange the
-order here. From here you can follow the Getting Started Guide.

@@ -1,0 +1,17 @@
+#!/bin/bash
+mkdir -p out
+
+docker build . --platform linux/amd64 -t artifact-boolean-algebras:amd64
+docker image save -o "artifact-boolean-algebras-amd64.tar" artifact-boolean-algebras:amd64
+
+docker build . --platform linux/arm64 -t artifact-boolean-algebras:arm64
+docker image save -o "artifact-boolean-algebras-arm64.tar" artifact-boolean-algebras:arm64
+
+if [ -d ".git" ]; then
+  echo "Git repository detected, creating zip with git history"
+  git archive --format=zip --output=out/artifact-boolean-algebras.zip \
+   --add-file artifact-boolean-algebras-amd64.tar --add-file artifact-boolean-algebras-arm64.tar
+else
+  echo "No git repository detected, creating zip without git history"
+  zip -r out/artifact-boolean-algebras.zip . -x "*.git*" -x "out/*" -x "*.tar"
+fi
