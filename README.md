@@ -413,7 +413,8 @@ on paper as well.
 The Flix programming language is fully open source and extensively documented.
 The compiler itself is in `flix-compiler-source/` folder but supportive material
 exists externally. You can modify the compiler in anyway you want and build it
-with `./gradlew build` in the `flix-compiler-source/` folder.
+with `./gradlew build` in the `flix-compiler-source/` folder. Running build
+might take upwards of 5 minutes.
 
 The main website is:
 
