@@ -6,9 +6,9 @@ docker image save -o "artifact-boolean-algebras-amd64.tar" artifact-boolean-alge
 
 if [ -d ".git" ]; then
   echo "Git repository detected, creating zip with git history"
-  git archive --format=zip --output=out/artifact-boolean-algebras.zip \
-   --add-file artifact-boolean-algebras-amd64.tar
-   # --add-file artifact-boolean-algebras-arm64.tar
+  git archive --format zip --output out/artifact-boolean-algebras.zip \
+   --add-file artifact-boolean-algebras-amd64.tar \
+   HEAD
 else
   echo "No git repository detected, creating zip without git history"
   zip -r out/artifact-boolean-algebras.zip . -x "*.git*" -x "out/*"
