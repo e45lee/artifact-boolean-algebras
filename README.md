@@ -58,29 +58,17 @@ Once the image has been loaded or downloaded, one can run the image by running:
 docker run -it artifact-boolean-algebras
 ```
 to enter the container terminal. It holds a copy of this README.md for convenience.
+If you want to read or edit files, both nano and vim are installed.
 
-If you want to read or edit files, both nano and vim is installed.
+# Step by Step Instructions
 
-To see that the proofs are correct, you can rebuild the proofs by:
+## Replication -- Proofs
+To see that the proofs are correct, you can rebuild the proofs from within the Docker image by running:
 ```
 cd proofs
 make clean
 make
 ```
-
-Flix is invoked via the `flix` command. If you just want to see it run, use
-`flix check --Xsummary --Xsubeffecting se-def,se-ins,se-lam` which will type
-check the standard library with all subeffecting options and output the library
-summary table of the paper.
-
-The meaning of the subeffecting options are explained in the paper
-- `se-def`: adds abstraction-site subeffecting to top-level functions.
-- `se-ins`: adds abstraction-site subeffecting to instance functions.
-- `se-lam`: adds abstraction-site subeffecting to lambdas and nested defs.
-
-# Step by Step Instructions
-
-## Replication -- Proofs
 
 ### Definitions
 Definitions for each calculus can be found in `Fsub_LetSum_Definitions.v` in
@@ -93,8 +81,7 @@ These theorems are found under `Lemma progress` and `Lemma preservation` respect
 
 ### Extracting the pre-built proofs and proof documentation
 While the artifact contains the sources of the Rocq files and the documentation
-associated with the Coq proofs as well, the Docker image contains a pre-built copy of both the Rocq proofs and documentation under `/workspace/proofs`.
-
+associated with the Rocq proofs as well, the Docker image contains a pre-built copy of both the Rocq proofs and documentation under `/workspace/proofs` and `/workspace/proofs/html` respectively.
 
 To extract the pre-built proofs and documentation (into
 a folder called `proofs`), run:
@@ -102,11 +89,19 @@ a folder called `proofs`), run:
 docker run artifact-boolean-algebras tar c proofs | tar x
 ```
 
-In addition, the Coq documentation can be found online at (hopefully soon!):
+In addition, the Rocq documentation can be found online at (hopefully soon!) at:
 <https://e45lee.github.io/artifact-boolean-algebras/toc.html>
 
 ## Replication -- Flix
-We will use `flix` commands to replicate the tables of the paper.
+Flix is invoked via the `flix` command. If you just want to see it run, use
+`flix check --Xsummary --Xsubeffecting se-def,se-ins,se-lam` which will type
+check the standard library with all subeffecting options and output the library
+summary table of the paper.
+
+The meaning of the subeffecting options are explained in the paper
+- `se-def`: adds abstraction-site subeffecting to top-level functions.
+- `se-ins`: adds abstraction-site subeffecting to instance functions.
+- `se-lam`: adds abstraction-site subeffecting to lambdas and nested defs.
 
 Running `flix` will always say
 ```
