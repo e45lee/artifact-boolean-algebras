@@ -10,7 +10,6 @@ WORKDIR $WORKSPACE
 # Copy the container content
 ADD --chown=1000:1000 evaluation/ $WORKSPACE/evaluation/
 ADD --chown=1000:1000 proofs/ $WORKSPACE/proofs/
-ADD --chown=1000:1000 README.md $WORKSPACE/README.md
 
 # Install required software
 RUN sudo apt-get update
@@ -33,6 +32,9 @@ RUN source /home/rocq/.sdkman/bin/sdkman-init.sh &&\
 # Build the proofs
 RUN cd $WORKSPACE/proofs && make
 RUN cd $WORKSPACE/proofs && make coqdoc
+
+# Add the README (last, so we can cache).
+ADD --chown=1000:1000 README.md $WORKSPACE/README.md
 
 # Add flix as an alias for easily calling the compiler and sure the shell is
 # bash, so the alias is available
