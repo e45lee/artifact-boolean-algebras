@@ -1,3 +1,7 @@
+TODO
+- proofs: tons of warnings when I run make
+- make seems to take a very long time (so long I stopped waiting). how long is normal?
+
 # Introduction
 This artifact contains both the formalized proof of F<:B and F<:BE as discussed
 in the paper and the modified Flix compiler used in the evaluation.
@@ -19,7 +23,7 @@ all except the first can be replicated as described below. The first table is a
 snapshot in time of online data and cannot as such be replicated meaningfully.
 
 This evaluation portion of this artifact consists of:
-- .devcontainer/..
+- .devcontainer/
   - This folder has a configuration for opening the container in VSCode.
 - evaluation/flix-compiler-source/
   - This folder contains the source code of the modified Flix compiler,
@@ -32,7 +36,7 @@ This evaluation portion of this artifact consists of:
   - This is the VSCode extension for Flix, used if opening the container in
     VSCode.
 - evaluation/flix.jar
-  - This is the built jar of flix-compiler-source. The `flix ..` command is just
+  - This is the built jar of flix-compiler-source. The `flix` command is just
     shorthand for `java -jar flix.jar`.
 
 # Hardware Dependencies
@@ -42,8 +46,8 @@ is a computer using either amd64/x86_64 or arm64/aarch64.
 # Getting Started Guide
 Load the docker image with the appropriate command to your architecture
 ```
-docker load --input qualified-types-with-boolean-algebras-image-x86.tar
-docker load --input qualified-types-with-boolean-algebras-image-aarch64.tar
+docker load --input qualified-types-with-boolean-algebras-image-amd64.tar
+docker load --input qualified-types-with-boolean-algebras-image-arm64.tar
 ```
 and then use
 ```
@@ -58,10 +62,15 @@ make clean
 make
 ```
 
-Flix is invoked via the `flix ..` command. If you just want to see it run, use
+Flix is invoked via the `flix` command. If you just want to see it run, use
 `flix check --Xsummary --Xsubeffecting se-def,se-ins,se-lam` which will type
 check the standard library with all subeffecting options and output the library
 summary table of the paper.
+
+The meaning of the subeffecting options are explained in the paper
+- `se-def`: adds abstraction-site subeffecting to top-level functions.
+- `se-ins`: adds abstraction-site subeffecting to instance functions.
+- `se-lam`: adds abstraction-site subeffecting to lambdas and nested defs.
 
 # Step by Step Instructions
 
@@ -98,9 +107,9 @@ In addition, the Coq documentation can be found online at (hopefully soon!):
 <https://e45lee.github.io/artifact-boolean-algebra/toc.html>
 
 ## Replication -- Flix
-We will use `flix ..` commands to replicate the tables of the paper.
+We will use `flix` commands to replicate the tables of the paper.
 
-Running `flix ..` will always say
+Running `flix` will always say
 ```
 No `flix.toml`. Will load source files from `*.flix`, `src/**`, and `test/**`.
 ```
@@ -234,7 +243,7 @@ e.g. `diff -r library library-all-casts-removed` will list the 47 casts removed.
 The compilation of these can be verified by
 ```
 cd library
-flix check
+flix check --Xlib nix
 cd ..
 
 cd library-all-casts-removed
@@ -259,10 +268,12 @@ type check (it will print some type errors). For the valid options, the `check`
 call should just return with no errors.
 
 ### Table 4 (page 21)
-The two effect variables columns are based on Table 2, see above. The variables
-of a column is that total variables with the total of the site added on top. The
-increase is then the new number of variables divided by the old number of
-variables.
+The two effect variables columns are based on Table 2, see above. The variable
+count of a row, is the number of total variables in Table 2 plus the total of
+the row-site added on top. E.g for Def, based on the table above, it is the
+total of column "Baseline EVars" (22,871), plus the total of column "SE-Def
+EVars" (1,311), which is 24,182. This is an increase of
+`100 * (24,182/22,871 - 1) = 5.7`
 
 Assuming that table 2 is replicated, the Effect variables columns are now:
 
@@ -287,16 +298,14 @@ This:
 - do 300 runs (`--n 300`) with
 - the given subeffecting options (`--Xsubeffecting <subeffecting options>`).
 
-The rows can be replicated with
+The rows can be replicated with this (time consuming) command
 ```
 flix Xperf --frontend --par --n 250 &&
 flix Xperf --frontend --par --n 250 --Xsubeffecting se-def &&
 flix Xperf --frontend --par --n 250 --Xsubeffecting se-ins &&
 flix Xperf --frontend --par --n 250 --Xsubeffecting se-lam
 ```
-either run separately or with `&&` between to run them in a sequence.
-
-The `Xperf` command will report progress on each run `Run x/250` and then at the
+Each `Xperf` command will report progress on each run `Run x/250` and then at the
 end it will output something like
 ```
 ~~~~ Flix Compiler Performance ~~~~
@@ -305,12 +314,12 @@ Throughput (best): 21,965 lines/sec (with 12 threads.)
 
   min: 10,866, max: 21,965, avg: 16,415, median: 21,965
 
-Finished 2 iterations on 67,181 lines of code in 9 seconds.
+Finished 250 iterations on 67,181 lines of code in 453 seconds.
 ```
 where the median (here `21,965`) is the number used in the paper.
 
 We found 250 to be a good number to reach stable performance (JVM JIT wil warm
-up and become faster), but a lower number is better if limited on time.
+up and become faster), but you can choose the number of runs freely.
 
 The slowdown factor is computed by `baseline/throughput`.
 
@@ -438,6 +447,7 @@ Run one of these commands based on your system
 docker build . --platform linux/amd64 -t qualified-types-with-boolean-algebras
 docker build . --platform linux/arm64 -t qualified-types-with-boolean-algebras
 ```
+The build command takes about 15 minutes.
 
 ## Creaking the Docker Image Files
 Run the following commands to get an amd64 and arm64 image.
