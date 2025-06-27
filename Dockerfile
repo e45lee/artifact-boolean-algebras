@@ -10,6 +10,7 @@ WORKDIR $WORKSPACE
 # Copy the container content
 ADD --chown=1000:1000 evaluation/ $WORKSPACE/evaluation/
 ADD --chown=1000:1000 proofs/ $WORKSPACE/proofs/
+ADD --chown=1000:1000 README.md $WORKSPACE/README.md
 
 # Install required software
 RUN sudo apt-get update
