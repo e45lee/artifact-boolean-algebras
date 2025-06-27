@@ -33,7 +33,7 @@ This evaluation portion of this artifact consists of:
     VSCode.
 - evaluation/flix.jar
   - This is the built jar of flix-compiler-source. The `flix` command is just
-    shorthand for `java -jar flix.jar`.
+    shorthand for `java -jar evaluation/flix.jar`.
 
 # Hardware Dependencies
 Since the artifact is contained within a Docker image, the only hardware
@@ -58,8 +58,8 @@ Once the image has been loaded or downloaded, one can run the image by running:
 ```
 docker run -it artifact-boolean-algebras
 ```
-to enter the container terminal. It holds a copy of this README.md for convenience.
-If you want to read or edit files, both nano and vim are installed.
+to enter the container terminal. It holds a copy of this README.md for
+convenience. If you want to read or edit files, both nano and vim are installed.
 
 # Step by Step Instructions
 
@@ -74,7 +74,7 @@ make
 
 ### Definitions
 Definitions for each calculus can be found in `Fsub_LetSum_Definitions.v` in
-each respective folder.  The proofs are presented in a locally nameless style,
+each respective folder. The proofs are presented in a locally nameless style,
 following the POPLMark 08 tutorial.
 
 ### Soundness Theorems / Proofs
@@ -88,8 +88,8 @@ associated with the Rocq proofs as well, the Docker image contains a pre-built
 copy of both the Rocq proofs and documentation under `/workspace/proofs` and
 `/workspace/proofs/html` respectively.
 
-To extract the pre-built proofs and documentation (into
-a folder called `proofs`), run:
+To extract the pre-built proofs and documentation (into a folder called
+`proofs`), run:
 ```
 docker run artifact-boolean-algebras tar c proofs | tar x
 ```
@@ -97,7 +97,7 @@ docker run artifact-boolean-algebras tar c proofs | tar x
 In addition, the Rocq documentation can be found online at (hopefully soon!) at:
 <https://e45lee.github.io/artifact-boolean-algebras/toc.html>
 
-## Replication -- Flix
+## Replication -- Evaluation
 Flix is invoked via the `flix` command. If you just want to see it run, use
 `flix check --Xsummary --Xsubeffecting se-def,se-ins,se-lam` which will type
 check the standard library with all subeffecting options and output the library
@@ -276,7 +276,7 @@ EVars" (1,311), which is 24,182. This is an increase of
 
 Assuming that table 2 is replicated, the Effect variables columns are now:
 
-|          | Paper                | Artifact
+|          | Paper                | Artifact             |
 |          | Variables | Increase | Variables | Increase |
 | -------- | --------- | -------- | --------- | -------- |
 | Baseline |    23,119 |        - |    22,871 |        - |
