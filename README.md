@@ -393,6 +393,9 @@ have the full IDE experience.
 - Create a file "test.flix" and begin typing, you should see the highlighting
   and error reporting.
 
+The subeffecting settings can be changed in the extension settings under
+"additional flix compiler arguments" and using `--Xsubeffectin se-lam` fx.
+
 ## Reusability Guide (Proofs)
 
 In general, the base calculi (stored in [proofs/Base](Base)) and can be reused
