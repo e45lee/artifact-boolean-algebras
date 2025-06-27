@@ -36,5 +36,5 @@ RUN cd $WORKSPACE/proofs && make coqdoc
 
 # Add flix as an alias for easily calling the compiler and sure the shell is
 # bash, so the alias is available
-RUN echo "alias flix='java -jar /workspace/flix.jar'" >> /home/rocq/.bashrc
+RUN echo "alias flix='java -jar /workspace/evaluation/flix.jar'" >> /home/rocq/.bashrc
 SHELL ["/bin/bash", "-c"]
