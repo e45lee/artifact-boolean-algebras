@@ -4,21 +4,23 @@ mkdir -p out
 docker buildx build . --platform linux/amd64 -t artifact-boolean-algebras:amd64
 docker image save -o "artifact-boolean-algebras-amd64.tar" artifact-boolean-algebras:amd64
 
-docker buildx build . --platform linux/arm64 -t artifact-boolean-algebras:arm64
-docker image save -o "artifact-boolean-algebras-arm64.tar" artifact-boolean-algebras:arm64
+# Rocq does not support arm64, so we do not build the arm64 image.
+# docker buildx build . --platform linux/arm64 -t artifact-boolean-algebras:arm64
+# docker image save -o "artifact-boolean-algebras-arm64.tar" artifact-boolean-algebras:arm64
 
-if [ $(uname -m) = "x86_64" ]; then
-  echo "Running on x86_64 architecture, retagging amd64 image."
+#if [ $(uname -m) = "x86_64" ]; then
+ # echo "Running on x86_64 architecture, retagging amd64 image."
   docker tag artifact-boolean-algebras:amd64 artifact-boolean-algebras
-elif [ $(uname -m) = "aarch64" ]; then
-  echo "Running on aarch64 architecture, retagging arm64 image."
-  docker tag artifact-boolean-algebras:arm64 artifact-boolean-algebras
-fi
+#elif [ $(uname -m) = "aarch64" ]; then
+#  echo "Running on aarch64 architecture, retagging arm64 image."
+#  docker tag artifact-boolean-algebras:arm64 artifact-boolean-algebras
+#fi
 
 if [ -d ".git" ]; then
   echo "Git repository detected, creating zip with git history"
   git archive --format=zip --output=out/artifact-boolean-algebras.zip \
-   --add-file artifact-boolean-algebras-amd64.tar --add-file artifact-boolean-algebras-arm64.tar
+   --add-file artifact-boolean-algebras-amd64.tar
+   # --add-file artifact-boolean-algebras-arm64.tar
 else
   echo "No git repository detected, creating zip without git history"
   zip -r out/artifact-boolean-algebras.zip . -x "*.git*" -x "out/*"

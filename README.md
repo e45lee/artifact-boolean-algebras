@@ -37,17 +37,14 @@ This evaluation portion of this artifact consists of:
 
 # Hardware Dependencies
 Since the artifact is contained within a Docker image, the only hardware
-requirements is a computer running on either AMD64 or on an modern 64-bit ARM
-implementation.
+requirements is a computer that is capable of running an amd64 Docker image.
+We have tested (with emulation) the Docker image on an arm64 Mac.
 
 # Getting Started Guide
 The Docker image containing both the Flix installation and the precompiled
-proofs can be found within the artifact, and can be loaded by running the
-appropriate command for your architecture:
+proofs can be found within the artifact, and can be loaded by running:
 ```
-docker load --input artifact-boolean-algebras-x86.tar # amd64
-
-docker load --input artifact-boolean-algebras-arm64.tar # arm64
+docker load --input artifact-boolean-algebras-amd64.tar # amd64
 ```
 
 Alternatively, one can download the Docker image directly from GitHub directly
