@@ -1,9 +1,8 @@
 # Introduction
-
 This artifact contains both the formalized proof of F<:B and F<:BE as discussed
 in the paper and the modified Flix compiler used in the evaluation.
 
-The proof consits of two calculi:
+The proof consists of two calculi:
 - F<:B, formalized in ([proofs/Base](Base)), consisting of an qualifier calculus
   based on an arbritary boolean algebra with uninterpreted qualifiers.
 - F<:BE, formalized in ([proofs/EffectExclusion](EffectExclusion)), consisting
@@ -19,21 +18,20 @@ The claims of the evaluation section is all expressed in the tables (1-4) and
 all except the first can be replicated as described below. The first table is a
 snapshot in time of online data and cannot as such be replicated meaningfully.
 
-This Flix portion of  this artifact consists of (under
-([flix-compiler/](flix-compiler/))):
+This evaluation portion of this artifact consists of:
 - .devcontainer/..
   - This folder has a configuration for opening the container in VSCode.
-- flix-compiler-source/
+- evaluation/flix-compiler-source/
   - This folder contains the source code of the modified Flix compiler,
     described and used in the paper. The compiler is not documented specifically
     in this artifact but has its existing documentation.
-- library../
+- evaluation/library../
   - These folders are used for Table 3 and is explained in Step by Step
     Instructions.
-- flix.flix-1.40.0.vsix
+- evaluation/flix.flix-1.40.0.vsix
   - This is the VSCode extension for Flix, used if opening the container in
     VSCode.
-- flix.jar
+- evaluation/flix.jar
   - This is the built jar of flix-compiler-source. The `flix ..` command is just
     shorthand for `java -jar flix.jar`.
 
@@ -99,8 +97,6 @@ In addition, the Coq documentation can be found online at (hopefully soon!):
 
 <https://e45lee.github.io/artifact-boolean-algebra/toc.html>
 
-
-
 ## Replication -- Flix
 We will use `flix ..` commands to replicate the tables of the paper.
 
@@ -113,11 +109,9 @@ since we don't use a `flix.toml` file, this is okay.
 The numbers found here slightly differs to the paper in some ways. These new
 numbers will be reflected in the revised paper and will then correspond exactly.
 
-
 ### Table 1 (page 17)
 This table is a snapshot in time of publicly hosted data so it cannot be
 replicated.
-
 
 ### Table 2 (page 18)
 ```
@@ -206,7 +200,6 @@ There are three differences from the paper:
   other columns have changed, the base line have changed accordingly (total was
   23119, now 22871).
 
-
 ### Table 3 (page 20)
 There are four folders containing copies of the Flix standard library:
 - library: This folder contains the baseline standard library, used by the
@@ -264,7 +257,6 @@ These listed commands use the minimum required subeffecting, as shown in the
 paper, but you can also reduce the subeffecting options and see that it does not
 type check (it will print some type errors). For the valid options, the `check`
 call should just return with no errors.
-
 
 ### Table 4 (page 21)
 The two effect variables columns are based on Table 2, see above. The variables
@@ -396,8 +388,9 @@ have the full IDE experience.
 The subeffecting settings can be changed in the extension settings under
 "additional flix compiler arguments" and using `--Xsubeffecting se-lam` fx.
 
-## Reusability Guide (Proofs)
+# Reusability Guide
 
+## Proofs
 In general, the base calculi (stored in [proofs/Base](Base)) and can be reused
 to serve as the basis of a soundness proof for a specific instantiation of a
 qualifier calculus to concrete qualifiers and interpretations. In particular,
@@ -407,7 +400,7 @@ reduction rules -- features -- present in each extension, taking care to assign
 meaningful and reasonable interpretations of qualifiers as well, as one would do
 on paper as well.
 
-# Reusability Guide (Flix)
+## Compiler
 The Flix programming language is fully open source and extensively documented.
 The compiler itself is in `flix-compiler-source/` folder but supportive material
 exists externally. You can modify the compiler in anyway you want and build it
