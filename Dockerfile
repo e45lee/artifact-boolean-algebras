@@ -14,7 +14,13 @@ RUN sudo apt-get update &&\
     wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb &&\
     sudo dpkg -i packages-microsoft-prod.deb &&\
     sudo apt-get update &&\
-    sudo apt-get install -y msopenjdk-21
+    sudo apt-get install curl -y &&\
+    sudo apt-get install unzip -y &&\
+    sudo apt-get install zip -y &&\
+    curl -s "https://get.sdkman.io" | bash
+
+RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install java 21.0.2-open && cd flix-source && ./gradlew build"
+
 
 # Copy the contents of content/ into the container.
 ADD --chown=1000:1000 flix-compiler/content/ $WORKSPACE/flix-compiler/
