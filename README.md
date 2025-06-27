@@ -328,9 +328,10 @@ The claim of the paper is that the slowdown of the subeffecting options are
 moderate and are acceptable, so as long as the slowdown is not worse than
 listed, the claim remains valid.
 
-### Rebuilding the Artifact
+## Replication -- Rebuilding the Artifact
 While not necessary to check the proofs nor to run Flix, the Docker images for this artifact can be rebuilt by running the 
-`./rebuild-artifact` script located at the root of the artifact from outside Docker.
+`./rebuild-artifact` script located at the root of the artifact from outside Docker.  Docker BuildX will need to be installed
+to do so.
 
 ## Using Flix and VSCode
 You can play around with Flix and the subeffecting via the command line or

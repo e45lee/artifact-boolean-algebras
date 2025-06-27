@@ -1,10 +1,10 @@
 #!/bin/bash
 mkdir -p out
 
-docker build . --platform linux/amd64 -t artifact-boolean-algebras:amd64
+docker buildx build . --platform linux/amd64 -t artifact-boolean-algebras:amd64
 docker image save -o "artifact-boolean-algebras-amd64.tar" artifact-boolean-algebras:amd64
 
-docker build . --platform linux/arm64 -t artifact-boolean-algebras:arm64
+docker buildx build . --platform linux/arm64 -t artifact-boolean-algebras:arm64
 docker image save -o "artifact-boolean-algebras-arm64.tar" artifact-boolean-algebras:arm64
 
 if [ -d ".git" ]; then
