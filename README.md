@@ -61,8 +61,8 @@ Once the image has been loaded or downloaded, one can run the image by running:
 ```
 docker run -it artifact-boolean-algebras
 ```
-to enter the container terminal. It holds a copy of this README.md for convenience.
-If you want to read or edit files, both nano and vim are installed.
+to enter the container terminal. It holds a copy of this README.md for
+convenience. If you want to read or edit files, both nano and vim are installed.
 
 # Step by Step Instructions
 
