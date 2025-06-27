@@ -7,19 +7,17 @@ ENV FLIX_JAR=$WORKSPACE/flix-compiler/flix.jar
 # Set work directory to /workspace.
 WORKDIR $WORKSPACE
 
-# Populate repository and install java 21 runtime.
-RUN sudo apt-get update &&\
-    sudo apt-get upgrade -y &&\
-    sudo apt-get install wget lsb-release -y &&\
-    wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb &&\
-    sudo dpkg -i packages-microsoft-prod.deb &&\
-    sudo apt-get update &&\
-    sudo apt-get install curl -y &&\
-    sudo apt-get install unzip -y &&\
-    sudo apt-get install zip -y &&\
-    curl -s "https://get.sdkman.io" | bash
+RUN sudo apt-get update
+RUN sudo apt-get upgrade -y
+RUN sudo apt-get install wget lsb-release -y
+RUN wget https://packages.microsoft.com/config/debian/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN sudo dpkg -i packages-microsoft-prod.deb
+RUN sudo apt-get install curl -y
+RUN sudo apt-get install unzip -y
+RUN sudo apt-get install zip -y
+    # sudo curl -s "https://get.sdkman.io" | bash
 
-RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install java 21.0.2-open && cd flix-source && ./gradlew build"
+# RUN sudo /bin/bash -c "source /home/.sdkman/bin/sdkman-init.sh && sdk install java 21.0.2-open && cd flix-compiler/flix-source && ./gradlew build"
 
 
 # Copy the contents of content/ into the container.
