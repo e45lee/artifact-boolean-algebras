@@ -975,11 +975,11 @@ Proof.
   intros e H. induction H; auto.
 Qed.
 
-Lemma typing_ctx_regular : forall E Q c T,
-  typing_ctx E Q c T ->
-  wf_env E /\ wf_qtyp E T /\ wf_qua E Q.
+Lemma typing_ctx_regular : forall E Q c T U,
+  typing_ctx E Q c T U ->
+  wf_env E /\ wf_qtyp E T /\ wf_qua E Q /\ wf_qtyp E U.
 Proof with simpl_env; try solve [auto | intuition auto].
-  intros E Q c T H; induction H...
+  intros E Q c T U H; induction H...
   Case "typing_ctx_abs".
     destruct (typing_regular _ _ _ _ H0) as [? [? [? ?]]]...
   Case "typing_ctx_app".
@@ -1125,7 +1125,7 @@ Qed.
   | H: subqtype _ _ _ |- _ => apply (proj1 (subqtype_regular _ _ _ H))
   | H: sub _ _ _ |- _ => apply (proj1 (sub_regular _ _ _ H))
   | H: typing _ _ _ _ |- _ => apply (proj1 (typing_regular _ _ _ _ H))
-  | H: typing_ctx _ _ _ _ |- _ => apply (proj1 (typing_ctx_regular _ _ _ _ H))
+  | H: typing_ctx _ _ _ _ _ |- _ => apply (proj1 (typing_ctx_regular _ _ _ _ _ H))
   end : core.
 
 #[export] Hint Extern 1 (wf_qtyp ?E ?T) =>
@@ -1133,7 +1133,8 @@ Qed.
   | H: typing E _ _ T |- _ => apply (proj1 (proj2 (proj2 (typing_regular _ _ _ _ H))))
   | H: subqtype E T _ |- _ => apply (proj1 (proj2 (subqtype_regular _ _ _ H)))
   | H: subqtype E _ T |- _ => apply (proj2 (proj2 (subqtype_regular _ _ _ H)))
-  | H: typing_ctx E _ _ T |- _ => apply (proj1 (proj2 (typing_ctx_regular _ _ _ _ H)))
+  | H: typing_ctx E _ _ T _ |- _ => apply (proj1 (proj2 (typing_ctx_regular _ _ _ _ _ H)))
+  | H: typing_ctx E _ _ _ T |- _ => apply (proj2 (proj2 (proj2 (typing_ctx_regular _ _ _ _ _ H))))
   end : core.
 
 #[export] Hint Extern 1 (wf_typ ?E ?T) =>
@@ -1149,7 +1150,7 @@ Qed.
   | H: subqual E T _ |- _ => apply (proj1 (proj2 (subqual_regular _ _ _ H)))
   | H: subqual E _ T |- _ => apply (proj2 (proj2 (subqual_regular _ _ _ H)))
   | H: wf_qtyp E (qtyp_qtyp T ?S) |- _ => apply (wf_qua_from_wf_qtyp E T S); auto
-  | H: typing_ctx E T _ _ |- _ => apply (proj2 (proj2 (typing_ctx_regular _ _ _ _ H)))
+  | H: typing_ctx E T _ _ _ |- _ => apply (proj1 (proj2 (proj2 (typing_ctx_regular _ _ _ _ _ H))))
   end : core.
 
 #[export] Hint Extern 1 (type ?T) =>

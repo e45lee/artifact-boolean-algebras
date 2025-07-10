@@ -1057,131 +1057,133 @@ Notation ctx := (list frame).
 Notation done := (@nil frame).
 
 (** context typing *)
-Inductive typing_ctx : env -> qua -> ctx -> qtyp -> Prop :=
+Inductive typing_ctx : env -> qua -> ctx -> qtyp -> qtyp -> Prop :=
   (** anything can be consumed by the done environment *)
   | typing_ctx_done : forall E Q T,
       wf_env E ->
       wf_qua E Q ->
       wf_qtyp E T ->
-      typing_ctx E Q done T
+      typing_ctx E Q done T T
   (** expecting an abstraction Q (T1 -> T2) *)
-  | typing_ctx_abs : forall E Q c e1 T1 T2,
-      typing_ctx E Q c T2 ->
+  | typing_ctx_abs : forall E Q c e1 T1 T2 U,
+      typing_ctx E Q c T2 U ->
       typing E Q e1 T1 ->
-      typing_ctx E Q (frame_abs e1 :: c) (qtyp_qtyp Q (typ_arrow T1 T2))
+      typing_ctx E Q (frame_abs e1 :: c) (qtyp_qtyp Q (typ_arrow T1 T2)) U
   (** expecting a value to fill an application to Q (T1 -> T2) *)
-  | typing_ctx_app : forall E Q c e1 T1 T2,
-      typing_ctx E Q c T2 ->
+  | typing_ctx_app : forall E Q c e1 T1 T2 U,
+      typing_ctx E Q c T2 U ->
       value e1 ->
       typing E Q e1 (qtyp_qtyp Q (typ_arrow T1 T2)) ->
-      typing_ctx E Q (frame_app e1 :: c) T1
+      typing_ctx E Q (frame_app e1 :: c) T1 U
   (** ditto / type abstractions and qualifier abstractions *)
-  | typing_ctx_tabs : forall L E Q c T1 T1' T2,
-      typing_ctx E Q c (open_tqt T2 T1') ->
+  | typing_ctx_tabs : forall L E Q c T1 T1' T2 U,
+      typing_ctx E Q c (open_tqt T2 T1') U ->
       sub E T1' T1 ->
       (forall X : atom, X `notin` L ->
           wf_qtyp (X ~ bind_sub T1 ++ E) (open_tqt T2 X)) ->
-      typing_ctx E Q (frame_tabs T1' :: c) (qtyp_qtyp Q (typ_all T1 T2))
-  | typing_ctx_qabs : forall L E Q c R R' T2,
-      typing_ctx E Q c (open_qqt T2 R') ->
+      typing_ctx E Q (frame_tabs T1' :: c) (qtyp_qtyp Q (typ_all T1 T2)) U
+  | typing_ctx_qabs : forall L E Q c R R' T2 U,
+      typing_ctx E Q c (open_qqt T2 R') U ->
       subqual E R' R ->
       (forall X : atom, X `notin` L ->
           wf_qtyp (X ~ bind_qua R ++ E) (open_qqt T2 X)) ->
-      typing_ctx E Q (frame_qabs R' :: c) (qtyp_qtyp Q (typ_qall R T2))
+      typing_ctx E Q (frame_qabs R' :: c) (qtyp_qtyp Q (typ_qall R T2)) U
   (** filling in a let *)
-  | typing_ctx_let : forall L E Q c e1 T1 T2,
-      typing_ctx E Q c T2 ->
+  | typing_ctx_let : forall L E Q c e1 T1 T2 U,
+      typing_ctx E Q c T2 U->
       (forall x, x `notin` L -> typing (x ~ bind_typ T1 ++ E) Q (open_ee e1 x) T2) ->
-      typing_ctx E Q (frame_let e1 :: c) T1
+      typing_ctx E Q (frame_let e1 :: c) T1 U
   (** expecting a sum type *)
-  | typing_ctx_inl : forall E P Q c T1 T2,
-      typing_ctx E Q c (qtyp_qtyp P (typ_sum T1 T2)) ->
-      typing_ctx E Q (frame_inl P :: c) T1
-  | typing_ctx_inr : forall E P Q c T1 T2,
-      typing_ctx E Q c (qtyp_qtyp P (typ_sum T1 T2)) ->
-      typing_ctx E Q (frame_inr P :: c) T2
+  | typing_ctx_inl : forall E P Q c T1 T2 U,
+      typing_ctx E Q c (qtyp_qtyp P (typ_sum T1 T2)) U ->
+      typing_ctx E Q (frame_inl P :: c) T1 U
+  | typing_ctx_inr : forall E P Q c T1 T2 U,
+      typing_ctx E Q c (qtyp_qtyp P (typ_sum T1 T2)) U ->
+      typing_ctx E Q (frame_inr P :: c) T2 U
   (** eliminating a pair *)
-  | typing_ctx_case : forall L E P Q c T T1 T2 e2 e3,
+  | typing_ctx_case : forall L E P Q c T T1 T2 e2 e3 U,
       wf_qua E P ->
-      typing_ctx E Q c T ->
+      typing_ctx E Q c T U ->
       (forall x : atom, x `notin` L ->
         typing (x ~ bind_typ T1 ++ E) Q (open_ee e2 x) T) ->
       (forall x : atom, x `notin` L ->
         typing (x ~ bind_typ T2 ++ E) Q (open_ee e3 x) T) ->
-      typing_ctx E Q (frame_case e2 e3 :: c) (qtyp_qtyp P (typ_sum T1 T2))
+      typing_ctx E Q (frame_case e2 e3 :: c) (qtyp_qtyp P (typ_sum T1 T2)) U
   (** expecting values to construct a pair *)
-  | typing_ctx_pair_1 : forall E P Q c e T1 T2,
+  | typing_ctx_pair_1 : forall E P Q c e T1 T2 U,
       wf_qua E P ->
-      typing_ctx E Q c (qtyp_qtyp P (typ_pair T1 T2)) ->
+      typing_ctx E Q c (qtyp_qtyp P (typ_pair T1 T2)) U ->
       typing E Q e T2 ->
-      typing_ctx E Q (frame_pair_1 P e :: c) T1
-  | typing_ctx_pair_2 : forall E P Q c v T1 T2,
+      typing_ctx E Q (frame_pair_1 P e :: c) T1 U
+  | typing_ctx_pair_2 : forall E P Q c v T1 T2 U,
       wf_qua E P ->
-      typing_ctx E Q c (qtyp_qtyp P (typ_pair T1 T2)) ->
+      typing_ctx E Q c (qtyp_qtyp P (typ_pair T1 T2)) U ->
       value v ->
       typing E Q v T1 ->
-      typing_ctx E Q (frame_pair_2 P v :: c) T2
+      typing_ctx E Q (frame_pair_2 P v :: c) T2 U
   (** discharging a pair *)
-  | typing_ctx_first : forall E P Q c T1 T2,
+  | typing_ctx_first : forall E P Q c T1 T2 U,
       wf_qua E P ->
-      typing_ctx E Q c T1 ->
+      typing_ctx E Q c T1 U ->
       wf_qtyp E T2 ->
-      typing_ctx E Q (frame_first :: c) (qtyp_qtyp P (typ_pair T1 T2))
-  | typing_ctx_second : forall E P Q c T1 T2,
+      typing_ctx E Q (frame_first :: c) (qtyp_qtyp P (typ_pair T1 T2)) U
+  | typing_ctx_second : forall E P Q c T1 T2 U,
       wf_qua E P ->
-      typing_ctx E Q c T2 ->
+      typing_ctx E Q c T2 U ->
       wf_qtyp E T1 ->
-      typing_ctx E Q (frame_second :: c) (qtyp_qtyp P (typ_pair T1 T2))
+      typing_ctx E Q (frame_second :: c) (qtyp_qtyp P (typ_pair T1 T2)) U
   (** frames *)
-  | typing_ctx_barrier : forall E Q c s t T,
-      typing_ctx E Q c T ->
+  | typing_ctx_barrier : forall E Q c s t T U,
+      typing_ctx E Q c T U ->
       (concretize Q) = Some s ->
       t ≤ s ->
-      typing_ctx E (abstractize t) (frame_barrier t :: c) T
+      typing_ctx E (abstractize t) (frame_barrier t :: c) T U
   (** checking / upqual *)
-  | typing_ctx_upqual : forall E Q c P T,
-      typing_ctx E Q c (qtyp_qtyp P T) ->
-      typing_ctx E Q (frame_upqual P :: c) (qtyp_qtyp P T)
-  | typing_ctx_check :  forall E Q c R P T,
+  | typing_ctx_upqual : forall E Q c P T U,
+      typing_ctx E Q c (qtyp_qtyp P T) U ->
+      typing_ctx E Q (frame_upqual P :: c) (qtyp_qtyp P T) U
+  | typing_ctx_check :  forall E Q c R P T U,
       wf_qua E R ->
-      typing_ctx E Q c (qtyp_qtyp P T) ->
-      typing_ctx E Q (frame_check R :: c) (qtyp_qtyp (qua_meet P R) T)
+      typing_ctx E Q c (qtyp_qtyp P T) U ->
+      typing_ctx E Q (frame_check R :: c) (qtyp_qtyp (qua_meet P R) T) U
   (** subtyping and subsumption *)
-  | typing_ctx_sub : forall E Q c S T,
-      typing_ctx E Q c T ->
+  | typing_ctx_sub : forall E Q c S T U,
+      typing_ctx E Q c T U ->
       subqtype E S T ->
-      typing_ctx E Q c S
-  | typing_ctx_subqual : forall E Q R c T,
-      typing_ctx E Q c T ->
+      typing_ctx E Q c S U
+  | typing_ctx_subqual : forall E Q R c T U,
+      typing_ctx E Q c T U ->
       subqual E R Q ->
-      typing_ctx E R c T
+      typing_ctx E R c T U
   (** negated barriers -- this is a little different
       as we can't simply evaluate Q --> it doesn't have
       to be compatible with t at all *)
-  | typing_ctx_without : forall E Q c t T,
-      typing_ctx E Q c T ->
-      typing_ctx E (qua_meet (abstractize (negate t)) Q) (frame_without t :: c) T
+  | typing_ctx_without : forall E Q c t T U,
+      typing_ctx E Q c T U ->
+      typing_ctx E (qua_meet (abstractize (negate t)) Q) (frame_without t :: c) T U
   (** if0 *)
-  | typing_ctx_if0 : forall E R c e2 e3 T Q,
+  | typing_ctx_if0 : forall E R c e2 e3 T Q U,
       wf_qua E Q ->
-      typing_ctx E R c T ->
+      typing_ctx E R c T U ->
       typing E R e2 T ->
       typing E R e3 T ->
-      typing_ctx E R (frame_if0 e2 e3 :: c) (qtyp_qtyp Q typ_int)
+      typing_ctx E R (frame_if0 e2 e3 :: c) (qtyp_qtyp Q typ_int) U
 .
-Notation "E @ Q |-c c : T ~≤ ⊥" := (typing_ctx E Q c T) (at level 70).
+Notation "E @ Q |-c c : T ~~> U" := (typing_ctx E Q c T U) (at level 70).
 
 Inductive state : Type :=
   | state_step (e : exp) (c : ctx) : state.
 
 Notation "〈 e | c 〉" := (state_step e c).
 
-Inductive typing_state : env -> state -> Prop :=
-  | typing_step : forall E Q e c T,
+Inductive typing_state : env -> state -> qtyp -> Prop :=
+  | typing_step : forall E Q e c T U,
     typing E Q e T ->
-    typing_ctx E Q c T ->
-    typing_state E〈 e | c 〉
+    typing_ctx E Q c T U ->
+    typing_state E 〈 e | c 〉U
 .
+Notation "E |-s 〈 e | c 〉 : U" := (typing_state E 〈 e | c 〉 U) (at level 70).
+
 
 Inductive barrier_compatible : ctx -> concrete_qua -> Prop :=
   | barrier_compatible_done : forall s, barrier_compatible done s
